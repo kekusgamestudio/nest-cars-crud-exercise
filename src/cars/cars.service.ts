@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Car } from './interfaces/car.interface';
 import { v4 as uuid } from 'uuid';
 import { CreateCarDto, UpdateCarDto } from './dto';
@@ -6,21 +10,11 @@ import { CreateCarDto, UpdateCarDto } from './dto';
 @Injectable()
 export class CarsService {
   private cars: Car[] = [
-    {
-      id: uuid(),
-      brand: 'Toyota',
-      model: 'Corolla',
-    },
-    {
-      id: uuid(),
-      brand: 'Honda',
-      model: 'Civic',
-    },
-    {
-      id: uuid(),
-      brand: 'Jeep',
-      model: 'Cherokee',
-    },
+    //{
+    //  id: uuid(),
+    //  brand: 'Toyota',
+    //  model: 'Corolla',
+    //},
   ];
 
   findAll() {
@@ -37,10 +31,10 @@ export class CarsService {
   }
 
   create(createCarDto: CreateCarDto) {
-    const car:Car = {
+    const car: Car = {
       id: uuid(),
       ...createCarDto,
-    }
+    };
     //console.log(car);
     this.cars.push(car);
     return car;
@@ -53,23 +47,25 @@ export class CarsService {
       throw new BadRequestException(`Car id cannot be replaced`);
     }
 
-    this.cars = this.cars.map(car => {
+    this.cars = this.cars.map((car) => {
       if (car.id === id) {
         carDB = {
           ...carDB,
           ...updateCarDto,
           id,
-        }
+        };
         return carDB;
       }
       return car;
-    })
+    });
     return carDB;
   }
 
   delete(id: string) {
-    const carDB = this.findOneById(id);
-    this.cars = this.cars.filter(car => car.id !== id);
+    this.cars = this.cars.filter((car) => car.id !== id);
   }
 
+  fillsCarsWithSeedData(cars: Car[]) {
+    this.cars = cars;
+  }
 }
